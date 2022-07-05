@@ -46,5 +46,11 @@ def get_routes(request):
 def get_notes(request):
     notes = Note.objects.all()
     serializer = NoteSerializer(notes, many=True)
+    return Response(serializer.data)
 
+
+@api_view(['GET'])
+def get_note(request, note_id: str):
+    notes = Note.objects.get(id=note_id)
+    serializer = NoteSerializer(notes, many=False)
     return Response(serializer.data)
