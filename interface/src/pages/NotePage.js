@@ -13,6 +13,14 @@ const NotePage = () => {
         getNote()
     }, [noteId])
 
+    let createNote = async () => {
+        await fetch(`/api/notes/create`, {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(note)
+        })
+    }
+
     let getNote = async () => {
         if (noteId === 'new') return
         let response = await fetch(`/api/notes/${noteId}`)
@@ -39,7 +47,13 @@ const NotePage = () => {
     }
 
     let handleSubmit = () => {
-        updateNote()
+        if (noteId !== 'new' && note.body === '') {
+            deleteNote()
+        } else if (noteId !== 'new') {
+            updateNote()
+        } else if (noteId === 'new' && note.body !== null) {
+            createNote()
+        }
         navigate('/')
     }
 
